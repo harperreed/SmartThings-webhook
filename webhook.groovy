@@ -4,7 +4,7 @@
  *  Author: Harper Reed
  */
 definition(
-    name: "SmartThings webhooks",
+    name: "Webhooks",
     author: "Harper Reed",
     description: "Send Smartthings events to a webhook",
     category: "My Apps",
@@ -142,8 +142,8 @@ def subscribeToEvents() {
 }
 
 def eventHandler(evt) {
-
-	def postBody = "[date:'${evt.date}', value:'${evt.value}', source:'${evt.source}', type:'${evt.type}', name:'${evt.displayName}']"
+	/*
+	def postBody = "[date:'${evt.date}', deviceId: '${evt.deviceId}', value:'${evt.value}', source:'${evt.source}', type:'${evt.type}', name:'${evt.displayName}']"
 
 	def params = [
   		uri: settings.url,
@@ -151,16 +151,16 @@ def eventHandler(evt) {
 	  	body: postBody 
 	]
 	httpPost(params)
-    
-	log.debug(evt.jsonValue)
-    /*
-	def params = [
+	*/
+	
+
+	def json_params = [
   		uri: settings.url,
   		success: successClosure,
-	  	body: evt.jsonValue 
+	  	body: [evt: [value: evt.value, date: evt.date, id: evt.deviceId, source: evt.source]] 
 	]
-	httpPostJson(params)
-    */
+	httpPostJson(json_params)
+
 }
 
 def successClosure = { response ->
