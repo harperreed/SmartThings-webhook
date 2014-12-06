@@ -2,8 +2,6 @@
  * SmartThings webhooks
  *
  *  Author: Harper Reed
- *  inspired by https://github.com/R-OG/smartthings/
- *
  */
 definition(
     name: "SmartThings webhooks",
@@ -83,9 +81,7 @@ def eventHandler(evt) {
 	//def toReplace = evt.displayName
 	//def replaced = toReplace.replaceAll(' ', '%20')
     //def name = replaced
-    def value = evt.value
-    log.debug(evt)
-	def postBody = "[value:'${evt.value}', name:'${evt.displayName}']"
+	def postBody = "[value:'${evt.value}', name:'${evt.displayName}', source:'${evt.source}', date:'${evt.date}']"
 	def params = [
   		uri: settings.url,
   		success: successClosure,
