@@ -92,52 +92,67 @@ def initialize() {
 
 
 def subscribeToEvents() {
-	subscribe(accelerationSensor, "accelerationSensor", eventHandler)
-	subscribe(actuator, "actuator", eventHandler)
+	subscribe(accelerationSensor, "acceleration ", eventHandler)
+
 	subscribe(alarm, "alarm", eventHandler)
 	subscribe(battery, "battery", eventHandler)
-	subscribe(beacon, "beacon", eventHandler)
+	subscribe(beacon, "presence", eventHandler)
 	subscribe(button, "button", eventHandler)
-	subscribe(carbonMonoxideDetector, "carbonMonoxideDetector", eventHandler)
-	subscribe(colorControl, "colorControl", eventHandler)
-	subscribe(configuration, "configuration", eventHandler)
-	subscribe(contactSensor, "contactSensor", eventHandler)
-	subscribe(doorControl, "doorControl", eventHandler)
-	subscribe(energyMeter, "energyMeter", eventHandler)
-	subscribe(illuminanceMeasurement, "illuminanceMeasurement", eventHandler)
-	subscribe(imageCapture, "imageCapture", eventHandler)
-	subscribe(indicator, "indicator", eventHandler)
-	subscribe(locationMode, "locationMode", eventHandler)
+	subscribe(carbonMonoxideDetector, "carbonMonoxide", eventHandler)
+	subscribe(colorControl, "hue", eventHandler)
+    subscribe(colorControl, "saturation", eventHandler)
+
+	subscribe(contactSensor, "contact", eventHandler)
+	subscribe(doorControl, "door", eventHandler)
+	subscribe(energyMeter, "energy", eventHandler)
+	subscribe(illuminanceMeasurement, "illuminance", eventHandler)
+	subscribe(imageCapture, "image", eventHandler)
+	subscribe(indicator, "indicatorStatus", eventHandler)
+	subscribe(locationMode, "mode", eventHandler)
 	subscribe(lock, "lock", eventHandler)
-	subscribe(lockCodes, "lockCodes", eventHandler)
-	subscribe(mediaController, "mediaController", eventHandler)
-	subscribe(momentary, "momentary", eventHandler)
-	subscribe(motionSensor, "motionSensor", eventHandler)
-	subscribe(musicPlayer, "musicPlayer", eventHandler)
-	subscribe(polling, "polling", eventHandler)
-	subscribe(powerMeter, "powerMeter", eventHandler)
-	subscribe(presenceSensor, "presenceSensor", eventHandler)
-	subscribe(refresh, "refresh", eventHandler)
-	subscribe(relativeHumidityMeasurement, "relativeHumidityMeasurement", eventHandler)
-	subscribe(relaySwitch, "relaySwitch", eventHandler)
+
+	subscribe(mediaController, "activities", eventHandler)
+   	subscribe(mediaController, "currentActivity", eventHandler)
+
+	subscribe(motionSensor, "motion", eventHandler)
+	subscribe(musicPlayer, "status", eventHandler)
+	subscribe(musicPlayer, "level", eventHandler)
+	subscribe(musicPlayer, "trackDescription", eventHandler)
+	subscribe(musicPlayer, "trackData", eventHandler)
+	subscribe(musicPlayer, "mute", eventHandler)
+
+	subscribe(powerMeter, "power", eventHandler)
+	subscribe(presenceSensor, "presence", eventHandler)
+
+	subscribe(relativeHumidityMeasurement, "humidity", eventHandler)
+	subscribe(relaySwitch, "switch", eventHandler)
 	subscribe(sensor, "sensor", eventHandler)
-	subscribe(signalStrength, "signalStrength", eventHandler)
-	subscribe(sleepSensor, "sleepSensor", eventHandler)
-	subscribe(smokeDetector, "smokeDetector", eventHandler)
-	subscribe(speechRecognition, "speechRecognition", eventHandler)
-	subscribe(speechSynthesis, "speechSynthesis", eventHandler)
-	subscribe(stepSensor, "stepSensor", eventHandler)
+	subscribe(signalStrength, "lqi", eventHandler)
+	subscribe(signalStrength, "rssi", eventHandler)
+	subscribe(sleepSensor, "sleeping", eventHandler)
+	subscribe(smokeDetector, "smoke", eventHandler)
+	subscribe(speechRecognition, "phraseSpoken", eventHandler)
+
+	subscribe(stepSensor, "goals", eventHandler)
+	subscribe(stepSensor, "steps", eventHandler)
 	subscribe(switchv, "switch", eventHandler)
-	subscribe(switchLevel, "switchLevel", eventHandler)
-	subscribe(temperatureMeasurement, "temperatureMeasurement", eventHandler)
-	subscribe(testCapability, "testCapability", eventHandler)
-	subscribe(thermostat, "thermostat", eventHandler)
-	subscribe(thermostatCoolingSetpoint, "thermostatCoolingSetpoint", eventHandler)
+	subscribe(switchLevel, "level", eventHandler)
+	subscribe(temperatureMeasurement, "temperature", eventHandler)
+
+	subscribe(thermostat, "temperature", eventHandler)
+	subscribe(thermostat, "heatingSetpoint", eventHandler)
+	subscribe(thermostat, "coolingSetpoint", eventHandler)
+	subscribe(thermostat, "thermostatSetpoint", eventHandler)
+	subscribe(thermostat, "thermostatMode", eventHandler)
+	subscribe(thermostat, "thermostatFanMode", eventHandler)
+	subscribe(thermostat, "thermostatOperatingState", eventHandler)
+    
+	subscribe(thermostatCoolingSetpoint, "coolingSetpoint", eventHandler)
 	subscribe(threeAxis, "threeAxis", eventHandler)
-	subscribe(tone, "tone", eventHandler)
-	subscribe(touchSensor, "touchSensor", eventHandler)
-	subscribe(valve, "valve", eventHandler)
-	subscribe(waterSensor, "waterSensor", eventHandler)
+
+	subscribe(touchSensor, "touch", eventHandler)
+	subscribe(valve, "contact", eventHandler)
+	subscribe(waterSensor, "water", eventHandler)
 
 }
 
@@ -152,12 +167,30 @@ def eventHandler(evt) {
 	]
 	httpPost(params)
 	*/
-	
+    def state_changed = evt.isStateChange()
+	def json_body = [
+    	evt: [
+        	value: evt.value, 
+            date: evt.date, 
+            name: evt.name, 
+            display_name: evt.displayName, 
+            description: evt.descriptionText,
+            id: evt.deviceId, 
+            source: evt.source, 
+            state_changed: evt.isStateChange(),
+            physical: evt.isPhysical(),
+            location_id: evt.locationId,
+            hub_id: evt.hubId, 
+            smartapp_id: evt.installedSmartAppId,
+            iso_date: evt.isoDate,
+            
+            ]
+        ] 
 
 	def json_params = [
   		uri: settings.url,
   		success: successClosure,
-	  	body: [evt: [value: evt.value, date: evt.date, id: evt.deviceId, source: evt.source]] 
+	  	body: json_body
 	]
 	httpPostJson(json_params)
 
