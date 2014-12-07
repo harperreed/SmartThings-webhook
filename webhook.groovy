@@ -5,11 +5,11 @@
  */
 definition(
     name: "Webhooks",
-    author: "Harper Reed",
+    author: "Harper Reed (@harper - harper@nata2.org)",
     description: "Send Smartthings events to a webhook",
     category: "My Apps",
-    iconUrl: "http://s13.postimg.org/hydblwntv/Event_Ghost.png",
-    iconX2Url: "http://s13.postimg.org/hydblwntv/Event_Ghost.png"
+    iconUrl: "https://s3.amazonaws.com/kinlane-productions/bw-icons/webhooks.png",
+    iconX2Url: "https://s3.amazonaws.com/kinlane-productions/bw-icons/webhooks.png"
 )
 
 preferences {
@@ -169,22 +169,18 @@ def eventHandler(evt) {
 	*/
     def state_changed = evt.isStateChange()
 	def json_body = [
-    	evt: [
+            id: evt.deviceId, 
+			date: evt.isoDate,
         	value: evt.value, 
-            date: evt.date, 
             name: evt.name, 
             display_name: evt.displayName, 
             description: evt.descriptionText,
-            id: evt.deviceId, 
             source: evt.source, 
             state_changed: evt.isStateChange(),
             physical: evt.isPhysical(),
             location_id: evt.locationId,
             hub_id: evt.hubId, 
-            smartapp_id: evt.installedSmartAppId,
-            iso_date: evt.isoDate,
-            
-            ]
+            smartapp_id: evt.installedSmartAppId
         ] 
 
 	def json_params = [
