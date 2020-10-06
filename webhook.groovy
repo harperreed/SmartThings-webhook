@@ -53,7 +53,7 @@ preferences {
 		input "illuminanceMeasurement", "capability.illuminanceMeasurement", title: "Illuminance Measurement", required: false, multiple: true
 		input "imageCapture", "capability.imageCapture", title: "Image Capture", required: false, multiple: true
 		input "indicator", "capability.indicator", title: "Indicator", required: false, multiple: true
-		input "locationMode", "capability.locationMode", title: "Location Mode", required: false, multiple: true
+		input "locationMode", "capability.locationMode", title: "Location Mode", required: false, multiple: false
 		input "lock", "capability.lock", title: "Lock", required: false, multiple: true
 		input "mediaController", "capability.mediaController", title: "Media Controller", required: false, multiple: true
 		input "motionSensor", "capability.motionSensor", title: "Motion Sensor", required: false, multiple: true
@@ -133,7 +133,7 @@ def subscribeToEvents() {
 	subscribe(illuminanceMeasurement, "illuminance", eventHandler)
 	subscribe(imageCapture, "image", eventHandler)
 	subscribe(indicator, "indicatorStatus", eventHandler)
-	subscribe(locationMode, "mode", eventHandler)
+	subscribe(location, "mode", eventHandler)
 	subscribe(lock, "lock", eventHandler)
 
 	subscribe(mediaController, "activities", eventHandler)
